@@ -1,6 +1,6 @@
 package com.ania.training.model;
 
-public interface PersonalData {
+public interface PersonalData extends Identification {
 
     void setName(String name);
     String getName();
