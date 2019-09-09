@@ -3,7 +3,9 @@ package com.ania.training.dao.implementation.inMemory;
 import com.ania.training.dao.PersonalDataDAO;
 import com.ania.training.dao.TeacherDAO;
 import com.ania.training.dao.exceptions.NotFoundException;
+import com.ania.training.model.PersonalData;
 import com.ania.training.model.Teacher;
+import com.google.gson.Gson;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -12,7 +14,9 @@ import java.util.Set;
 public class InMemoryTeacherDAO implements TeacherDAO {
 
     private final Set<Teacher> teachers = new HashSet<>();
+    private final Gson gson = new Gson();
     private final PersonalDataDAO personalDataDAO;
+    private static long lastUsedId = 0;
 
     public InMemoryTeacherDAO(PersonalDataDAO personalDataDAO) {
         this.personalDataDAO = personalDataDAO;
@@ -20,7 +24,11 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public Teacher create(String name, String surname, String emailAddress) {
-        return null;
+        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
+        Teacher teacher = new Teacher(personalData);
+        teacher.setId(++lastUsedId);
+        teachers.add(teacher);
+        return gson.fromJson(gson.toJson(teacher), Teacher.class);
     }
 
     @Override
@@ -30,7 +38,7 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public Optional<Teacher> findOne(long id) {
-        return Optional.empty();
+        return teachers.stream().filter(p -> id == p.getId()).findFirst();
     }
 
     @Override
