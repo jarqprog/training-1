@@ -7,7 +7,6 @@ import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
 import com.ania.training.model.Student;
 import com.google.gson.Gson;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +17,8 @@ public class InMemoryStudentDAO implements StudentDAO {
     private final Gson gson = new Gson();
     private final TeacherDAO teacherDAO;
     private final PersonalDataDAO personalDataDAO;
+    private static long lastUsedId = 0;
+
 
     public InMemoryStudentDAO(TeacherDAO teacherDAO, PersonalDataDAO personalDataDAO) {
         this.teacherDAO = teacherDAO;
@@ -26,10 +27,11 @@ public class InMemoryStudentDAO implements StudentDAO {
 
     @Override
     public Student create(String name, String surname, String emailAddress) {
-        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
-        Student student = new Student(personalData);
-        //id
-
+//        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
+//        Student student = new Student(personalData);
+//        student.setId(++lastUsedId);
+//        students.add(student);
+//        return gson.fromJson(gson.toJson(student), Student.class);
         return null;
     }
 
@@ -40,7 +42,7 @@ public class InMemoryStudentDAO implements StudentDAO {
 
     @Override
     public Optional<Student> findOne(long id) {
-        return Optional.empty();
+        return students.stream().filter(p -> id == p.getId()).findFirst();
     }
 
     @Override
