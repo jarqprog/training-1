@@ -1,0 +1,15 @@
+<Configuration status="WARN">
+
+    <Appenders>
+        <File name="file-out" fileName="training.log" append="true">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%nw</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="file-out"/>
+        </Root>
+    </Loggers>
+</Configuration>
