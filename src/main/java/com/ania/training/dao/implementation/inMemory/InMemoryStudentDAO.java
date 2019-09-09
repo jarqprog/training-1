@@ -27,11 +27,12 @@ public class InMemoryStudentDAO implements StudentDAO {
 
     @Override
     public Student create(String name, String surname, String emailAddress) {
-        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
-        Student student = new Student(personalData);
-        student.setId(++lastUsedId);
-        students.add(student);
-        return gson.fromJson(gson.toJson(student), Student.class);
+//        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
+//        Student student = new Student(personalData);
+//        student.setId(++lastUsedId);
+//        students.add(student);
+//        return gson.fromJson(gson.toJson(student), Student.class);
+        return null;
     }
 
     @Override

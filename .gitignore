@@ -2,7 +2,7 @@
 *.class
 
 # Log file
-#*.log
+*.log
 
 # BlueJ files
 *.ctxt
@@ -23,7 +23,7 @@
 *.txt
 *.db
 *.sq
-#*.xml
+*.xml
 *.dll
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
