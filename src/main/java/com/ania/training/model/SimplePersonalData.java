@@ -1,7 +1,9 @@
 package com.ania.training.model;
 
 
-public class SimplePersonalData extends SimpleIdentification {
+import java.util.Objects;
+
+public class SimplePersonalData extends SimpleIdentification implements PersonalData {
 
     private String name;
     private String surname;
@@ -49,5 +51,27 @@ public class SimplePersonalData extends SimpleIdentification {
 
     public String getMobileNumber() {
         return mobileNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "SimplePersonalData{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SimplePersonalData that = (SimplePersonalData) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(surname, that.surname) &&
+                Objects.equals(emailAddress, that.emailAddress) &&
+                Objects.equals(mobileNumber, that.mobileNumber);
     }
 }
