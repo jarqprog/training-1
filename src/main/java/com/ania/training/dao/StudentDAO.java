@@ -1,6 +1,7 @@
 package com.ania.training.dao;
 
 
+import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.Student;
 
@@ -9,7 +10,7 @@ import java.util.Set;
 
 public interface StudentDAO {
 
-    Student create(String name, String surname, String emailAddress);
+    Student create(String name, String surname, String emailAddress) throws CreationException;
     Set<Student> findAll();
     Optional<Student> findOne(long id);
     Set<Student> findAllByTeacher(long teacherId);

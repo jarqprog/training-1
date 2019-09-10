@@ -1,6 +1,7 @@
 package com.ania.training.dao.implementation.inMemory;
 
 import com.ania.training.dao.PersonalDataDAO;
+import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
 import com.ania.training.model.SimplePersonalData;
@@ -17,16 +18,22 @@ public class InMemoryPersonalDataDAO implements PersonalDataDAO {
     private static long lastUsedId = 0;
 
     @Override
-    public PersonalData create(String name, String surname, String emailAddress) {
-        PersonalData personalData = new SimplePersonalData(name, surname, emailAddress);
-        personalData.setId(++lastUsedId);
-        personalDataSet.add(personalData);
-        return gson.fromJson(gson.toJson(personalData), SimplePersonalData.class);
-    }
+    public PersonalData create(String name, String surname, String emailAddress) throws CreationException {
 
+        try {
+            PersonalData personalData = new SimplePersonalData(name, surname, emailAddress);
+            personalData.setId(++lastUsedId);
+            personalDataSet.add(personalData);
+            return gson.fromJson(gson.toJson(personalData), SimplePersonalData.class);
+        } catch (Exception e) {
+            throw new CreationException(PersonalData.class, e);
+        }
+    }
+;
     @Override
     public Optional<PersonalData> findOne(long id) {
-        return personalDataSet.stream().filter(p -> id == p.getId()).findFirst();
+        Optional<PersonalData> personalData = personalDataSet.stream().filter(p -> id == p.getId()).findFirst();
+        return personalData.map(data -> gson.fromJson(gson.toJson(data), SimplePersonalData.class));
     }
 
     @Override
