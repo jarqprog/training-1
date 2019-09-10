@@ -5,7 +5,6 @@ import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
 import com.ania.training.model.SimplePersonalData;
-import com.google.gson.Gson;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -14,7 +13,6 @@ import java.util.Set;
 public class InMemoryPersonalDataDAO implements PersonalDataDAO {
 
     private final Set<PersonalData> personalDataSet = new HashSet<>();
-    private final Gson gson = new Gson();
     private static long lastUsedId = 0;
 
     @Override
@@ -24,7 +22,7 @@ public class InMemoryPersonalDataDAO implements PersonalDataDAO {
             PersonalData personalData = new SimplePersonalData(name, surname, emailAddress);
             personalData.setId(++lastUsedId);
             personalDataSet.add(personalData);
-            return gson.fromJson(gson.toJson(personalData), SimplePersonalData.class);
+            return personalData.copy();
         } catch (Exception e) {
             throw new CreationException(PersonalData.class, e);
         }
@@ -33,7 +31,7 @@ public class InMemoryPersonalDataDAO implements PersonalDataDAO {
     @Override
     public Optional<PersonalData> findOne(long id) {
         Optional<PersonalData> personalData = personalDataSet.stream().filter(p -> id == p.getId()).findFirst();
-        return personalData.map(data -> gson.fromJson(gson.toJson(data), SimplePersonalData.class));
+        return personalData.map(PersonalData::copy);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class InMemoryPersonalDataDAO implements PersonalDataDAO {
         current.setSurname(personalData.getSurname());
         current.setEmailAddress(personalData.getEmailAddress());
         current.setMobileNumber(personalData.getMobileNumber());
-        return gson.fromJson(gson.toJson(current), SimplePersonalData.class);
+        return current.copy();
     }
 
     @Override
@@ -55,8 +53,8 @@ public class InMemoryPersonalDataDAO implements PersonalDataDAO {
     }
 
     private void validateIfContains(PersonalData personalData) throws NotFoundException {
-        if (! personalDataSet.contains(personalData)) {
-            throw new NotFoundException(SimplePersonalData.class, personalData.getId());
+        if (personalData == null || !personalDataSet.contains(personalData)) {
+            throw new NotFoundException(SimplePersonalData.class, personalData == null ? -1 : personalData.getId());
         }
     }
 }
