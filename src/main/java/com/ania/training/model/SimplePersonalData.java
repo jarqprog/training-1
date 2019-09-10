@@ -74,4 +74,15 @@ public class SimplePersonalData extends SimpleIdentification implements Personal
                 Objects.equals(emailAddress, that.emailAddress) &&
                 Objects.equals(mobileNumber, that.mobileNumber);
     }
+
+    @Override
+    public PersonalData copy() {
+        PersonalData copy = new SimplePersonalData();
+        copy.setId(getId());
+        copy.setName(getName());
+        copy.setSurname(getSurname());
+        copy.setEmailAddress(getEmailAddress());
+        copy.setMobileNumber(getMobileNumber());
+        return copy;
+    }
 }
