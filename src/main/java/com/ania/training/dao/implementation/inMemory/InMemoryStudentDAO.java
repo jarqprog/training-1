@@ -3,6 +3,7 @@ package com.ania.training.dao.implementation.inMemory;
 import com.ania.training.dao.PersonalDataDAO;
 import com.ania.training.dao.StudentDAO;
 import com.ania.training.dao.TeacherDAO;
+import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
 import com.ania.training.model.Student;
@@ -10,6 +11,7 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class InMemoryStudentDAO implements StudentDAO {
 
@@ -26,28 +28,34 @@ public class InMemoryStudentDAO implements StudentDAO {
     }
 
     @Override
-    public Student create(String name, String surname, String emailAddress) {
-//        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
-//        Student student = new Student(personalData);
-//        student.setId(++lastUsedId);
-//        students.add(student);
-//        return gson.fromJson(gson.toJson(student), Student.class);
-        return null;
+    public Student create(String name, String surname, String emailAddress) throws CreationException {
+        try {
+            PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
+            Student student = new Student(personalData);
+            student.setId(++lastUsedId);
+            students.add(student);
+            return gson.fromJson(gson.toJson(student), Student.class);//todo need to resolve issue with handling nested object
+        } catch (Exception e) {
+            throw new CreationException(Student.class, e);
+        }
     }
 
     @Override
     public Set<Student> findAll() {
-        return new HashSet<>();
+        return students.stream()
+                .map(s -> gson.fromJson(gson.toJson(s), Student.class))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Optional<Student> findOne(long id) {
-        return students.stream().filter(p -> id == p.getId()).findFirst();
+        Optional<Student> student = students.stream().filter(p -> id == p.getId()).findFirst();
+        return student.map(data -> gson.fromJson(gson.toJson(data), Student.class));
     }
 
     @Override
     public Set<Student> findAllByTeacher(long teacherId) {
-        return null;
+        return new HashSet<>();
     }
 
     @Override

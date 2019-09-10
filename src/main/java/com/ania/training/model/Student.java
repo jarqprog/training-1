@@ -1,7 +1,5 @@
 package com.ania.training.model;
 
-import java.util.Objects;
-
 public class Student extends SimpleIdentification {
 
     private final PersonalData person;

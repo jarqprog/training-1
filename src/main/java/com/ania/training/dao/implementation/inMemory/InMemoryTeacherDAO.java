@@ -2,10 +2,12 @@ package com.ania.training.dao.implementation.inMemory;
 
 import com.ania.training.dao.PersonalDataDAO;
 import com.ania.training.dao.TeacherDAO;
+import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
 import com.ania.training.model.Teacher;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -23,12 +25,16 @@ public class InMemoryTeacherDAO implements TeacherDAO {
     }
 
     @Override
-    public Teacher create(String name, String surname, String emailAddress) {
-        PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
-        Teacher teacher = new Teacher(personalData);
-        teacher.setId(++lastUsedId);
-        teachers.add(teacher);
-        return gson.fromJson(gson.toJson(teacher), Teacher.class);
+    public Teacher create(String name, String surname, String emailAddress) throws CreationException {
+        try {
+            PersonalData personalData = personalDataDAO.create(name, surname, emailAddress);
+            Teacher teacher = new Teacher(personalData);
+            teacher.setId(++lastUsedId);
+            teachers.add(teacher);
+            return gson.fromJson(gson.toJson(teacher), Teacher.class);
+        } catch (Exception e) {
+            throw new CreationException(Teacher.class, e);
+        }
     }
 
     @Override
