@@ -44,4 +44,11 @@ public class Student extends SimpleIdentification {
         Student student = (Student) o;
         return getPerson().equals(student.getPerson());
     }
+
+    public Student copy() {
+        Student copy = new Student(person.copy());
+        copy.setId(getId());
+        copy.setTeacher(teacher == null ? null : teacher.copy());
+        return copy;
+    }
 }

@@ -10,5 +10,6 @@ public interface PersonalData extends Identification {
     String getEmailAddress();
     void setMobileNumber(String mobileNumber);
     String getMobileNumber();
+    PersonalData copy();
 
 }
