@@ -29,4 +29,10 @@ public class Teacher extends SimpleIdentification {
         Teacher teacher = (Teacher) o;
         return Objects.equals(getPerson(), teacher.getPerson());
     }
+
+    public Teacher copy() {
+        Teacher copy = new Teacher(person.copy());
+        copy.setId(getId());
+        return copy;
+    }
 }

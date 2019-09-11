@@ -6,17 +6,12 @@ import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
 import com.ania.training.model.Teacher;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryTeacherDAO implements TeacherDAO {
 
     private final Set<Teacher> teachers = new HashSet<>();
-    private final Gson gson = new Gson();
     private final PersonalDataDAO personalDataDAO;
     private static long lastUsedId = 0;
 
@@ -31,7 +26,7 @@ public class InMemoryTeacherDAO implements TeacherDAO {
             Teacher teacher = new Teacher(personalData);
             teacher.setId(++lastUsedId);
             teachers.add(teacher);
-            return gson.fromJson(gson.toJson(teacher), Teacher.class);
+            return teacher.copy();
         } catch (Exception e) {
             throw new CreationException(Teacher.class, e);
         }
@@ -39,7 +34,7 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public Set<Teacher> findAll() {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
@@ -55,5 +50,11 @@ public class InMemoryTeacherDAO implements TeacherDAO {
     @Override
     public void remove(Teacher teacher) throws NotFoundException {
 
+    }
+
+    private void validateIfContains(Teacher teacher) throws NotFoundException {
+        if (teacher == null || !teachers.contains(teacher)) {
+            throw new NotFoundException(Teacher.class, teacher == null ? -1 : teacher.getId());
+        }
     }
 }
