@@ -8,6 +8,7 @@ import com.ania.training.model.PersonalData;
 import com.ania.training.model.Teacher;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTeacherDAO implements TeacherDAO {
 
@@ -34,12 +35,17 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public Set<Teacher> findAll() {
-        return new HashSet<>();
+       return teachers.stream()
+               .map(Teacher::copy)
+               .collect(Collectors.toSet());
     }
 
     @Override
-    public Optional<Teacher> findOne(long id) {
-        return teachers.stream().filter(p -> id == p.getId()).findFirst();
+    public Optional<Teacher> findOne(long teacherId) {
+        Optional<Teacher> teacher = teachers.stream()
+                .filter(p -> teacherId == p.getId())
+                .findFirst();
+        return teacher.map(Teacher::copy);
     }
 
     @Override
@@ -49,6 +55,7 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public void remove(Teacher teacher) throws NotFoundException {
+
 
     }
 
