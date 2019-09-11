@@ -19,7 +19,7 @@ public class App {
         PersonalDataDAO personalDataDAO = new InMemoryPersonalDataDAO();
         TeacherDAO teacherDao = new InMemoryTeacherDAO(personalDataDAO);
         StudentDAO studentDao = new InMemoryStudentDAO(teacherDao, personalDataDAO);
-        StudentService studentService = new SimpleStudentService(studentDao);
+        StudentService studentService = SimpleStudentService.getInstance(studentDao);
 
         System.out.println(studentService.create("Ala", "Ilo", "asfgafsf@ahsg.pl"));
         System.out.println(studentService.create("Jarek", "Kucharczyk", "jarqprog@gmail.com"));
