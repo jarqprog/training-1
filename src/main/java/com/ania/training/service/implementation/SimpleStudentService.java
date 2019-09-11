@@ -2,13 +2,13 @@ package com.ania.training.service.implementation;
 
 import com.ania.training.dao.StudentDAO;
 import com.ania.training.dao.exceptions.CreationException;
+import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.Student;
 import com.ania.training.service.StudentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,16 +45,29 @@ public class SimpleStudentService implements StudentService {
 
     @Override
     public Set<Student> findAllByTeacher(long teacherId) {
-        return new HashSet<>();
+        return studentDAO.findAllByTeacher(teacherId);
     }
 
     @Override
     public Optional<Student> update(Student student) {
+        logger.info(String.format("Updating student (id=%s) with data: ", student.getId()) + student);
+        try {
+            return Optional.of(studentDAO.update(student));
+        } catch (NotFoundException e) {
+            logger.error(e);
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean remove(Student student) {
+        logger.info(String.format("Removing student (id=%s) with data: ", student.getId()) + student);
+        try {
+            studentDAO.remove(student);
+            return true;
+        } catch (NotFoundException e) {
+            logger.error(e);
+        }
         return false;
     }
 }
