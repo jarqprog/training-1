@@ -5,7 +5,6 @@ import com.ania.training.dao.TeacherDAO;
 import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
-import com.ania.training.model.SimplePersonalData;
 import com.ania.training.model.Teacher;
 
 import java.util.*;
@@ -53,7 +52,7 @@ public class InMemoryTeacherDAO implements TeacherDAO {
     public Teacher update(Teacher teacher) throws NotFoundException {
         validateIfContains(teacher);
         Teacher current = findOne(teacher.getId())
-                .orElseThrow(() -> new NotFoundException(SimplePersonalData.class, teacher.getId()));
+                .orElseThrow(() -> new NotFoundException(Teacher.class, teacher.getId()));
         personalDataDAO.update(teacher.getPerson());
         return current.copy();
     }
