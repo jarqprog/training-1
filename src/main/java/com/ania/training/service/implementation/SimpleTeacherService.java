@@ -1,6 +1,7 @@
 package com.ania.training.service.implementation;
 
 import com.ania.training.dao.TeacherDAO;
+import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.Teacher;
 import com.ania.training.service.TeacherService;
 import org.apache.logging.log4j.LogManager;
@@ -27,21 +28,33 @@ public class SimpleTeacherService implements TeacherService {
 
     @Override
     public Set<Teacher> findAll() {
-        return new HashSet<>();
+        return teacherDAO.findAll();
     }
 
     @Override
     public Optional<Teacher> findOne(long id) {
-        return Optional.empty();
+        return teacherDAO.findOne(id);
     }
 
     @Override
     public Optional<Teacher>  update(Teacher teacher) {
-        return Optional.empty();
+        logger.info(String.format("Updating teacher (id=%s) with data: ", teacher.getId()) + teacher);
+        try {
+            return Optional.of(teacherDAO.update(teacher) );
+        } catch (NotFoundException e) {
+            logger.error(e);
+        } return Optional.empty();
     }
 
     @Override
     public boolean remove(Teacher teacher) {
+
+        try {
+            teacherDAO.remove(teacher);
+            return true;
+        } catch (NotFoundException e) {
+            logger.error(e);
+        }
         return false;
     }
 }
