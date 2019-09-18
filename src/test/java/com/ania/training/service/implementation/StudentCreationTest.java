@@ -1,11 +1,6 @@
 package com.ania.training.service.implementation;
 
-import com.ania.training.dao.PersonalDataDAO;
-import com.ania.training.dao.StudentDAO;
-import com.ania.training.dao.TeacherDAO;
-import com.ania.training.dao.implementation.inMemory.InMemoryPersonalDataDAO;
-import com.ania.training.dao.implementation.inMemory.InMemoryStudentDAO;
-import com.ania.training.dao.implementation.inMemory.InMemoryTeacherDAO;
+import com.ania.training.applicationContext.impl.TestContext;
 import com.ania.training.model.Student;
 import com.ania.training.service.StudentService;
 import org.junit.Before;
@@ -21,10 +16,9 @@ public class StudentCreationTest {
 
     @Before
     public void init() {
-        PersonalDataDAO personalDataDAO = new InMemoryPersonalDataDAO();
-        TeacherDAO teacherDAO = new InMemoryTeacherDAO(personalDataDAO);
-        StudentDAO studentDAO = new InMemoryStudentDAO(teacherDAO, personalDataDAO);
-        studentService = SimpleStudentService.getInstance(studentDAO);
+        studentService = TestContext
+                .getInstance()
+                .getService(SimpleStudentService.class);
     }
 
     @Test
