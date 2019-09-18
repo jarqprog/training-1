@@ -1,12 +1,11 @@
 package com.ania.training.service;
 
-import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.Student;
 
 import java.util.Optional;
 import java.util.Set;
 
-public interface StudentService {
+public interface StudentService extends Service {
 
     Optional<Student> create(String name, String surname, String emailAddress);
     Set<Student> findAll();

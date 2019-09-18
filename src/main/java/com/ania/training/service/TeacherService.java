@@ -5,7 +5,7 @@ import com.ania.training.model.Teacher;
 import java.util.Optional;
 import java.util.Set;
 
-public interface TeacherService {
+public interface TeacherService extends Service {
 
     Optional<Teacher> create(String name, String surname, String emailAddress);
     Set<Teacher> findAll();
