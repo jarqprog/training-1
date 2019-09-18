@@ -23,7 +23,7 @@ public class DevContext implements Context {
     private static StudentService studentService;
     private static TeacherService teacherService;
 
-    public static Context getDevContext() {
+    public static Context getInstance() {
         if (instance == null) {
             instance = new DevContext();
         }
