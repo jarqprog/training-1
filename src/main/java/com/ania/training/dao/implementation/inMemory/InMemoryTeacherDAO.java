@@ -5,6 +5,7 @@ import com.ania.training.dao.TeacherDAO;
 import com.ania.training.dao.exceptions.CreationException;
 import com.ania.training.dao.exceptions.NotFoundException;
 import com.ania.training.model.PersonalData;
+import com.ania.training.model.SimplePersonalData;
 import com.ania.training.model.Teacher;
 
 import java.util.*;
@@ -35,9 +36,9 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public Set<Teacher> findAll() {
-       return teachers.stream()
-               .map(Teacher::copy)
-               .collect(Collectors.toSet());
+        return teachers.stream()
+                .map(Teacher::copy)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -50,13 +51,17 @@ public class InMemoryTeacherDAO implements TeacherDAO {
 
     @Override
     public Teacher update(Teacher teacher) throws NotFoundException {
-        return null;
+        validateIfContains(teacher);
+        Teacher current = findOne(teacher.getId())
+                .orElseThrow(() -> new NotFoundException(SimplePersonalData.class, teacher.getId()));
+        personalDataDAO.update(teacher.getPerson());
+        return current.copy();
     }
 
     @Override
     public void remove(Teacher teacher) throws NotFoundException {
-
-
+        validateIfContains(teacher);
+        teachers.remove(teacher);
     }
 
     private void validateIfContains(Teacher teacher) throws NotFoundException {
