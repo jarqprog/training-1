@@ -1,5 +1,6 @@
 package com.ania.training.service.implementation;
 
+import com.ania.training.applicationContext.impl.DevContext;
 import com.ania.training.dao.PersonalDataDAO;
 import com.ania.training.dao.StudentDAO;
 import com.ania.training.dao.TeacherDAO;
@@ -21,10 +22,9 @@ public class StudentCreationTest {
 
     @Before
     public void init() {
-        PersonalDataDAO personalDataDAO = new InMemoryPersonalDataDAO();
-        TeacherDAO teacherDAO = new InMemoryTeacherDAO(personalDataDAO);
-        StudentDAO studentDAO = new InMemoryStudentDAO(teacherDAO, personalDataDAO);
-        studentService = SimpleStudentService.getInstance(studentDAO);
+        studentService = DevContext
+                .getDevContext()
+                .getService(SimpleStudentService.class);
     }
 
     @Test
